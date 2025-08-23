@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Post Organizer - Categorize and Find Your Saved LinkedIn Posts</title>
+    <meta name="description" content="Organize LinkedIn saved posts with custom categories. Find important content quickly with search and filtering. Free Chrome extension.">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="LinkedIn Post Organizer - Chrome Extension">
+    <meta property="og:description" content="Add categories to your LinkedIn saved posts and find them easily with search and filtering.">
+    <meta property="og:type" content="website">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #0077B5 0%, #005885 100%);
+            color: white;
+            padding: 80px 0 100px 0;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .logo svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .tagline {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            background: white;
+            color: #0077B5;
+            padding: 18px 35px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            gap: 12px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .chrome-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .features-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: #0077B5;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px auto;
+        }
+
+        .feature-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .how-it-works h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #0077B5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 auto 24px auto;
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .step p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .benefits h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .benefits-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 60px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .benefits-list {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            gap: 20px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 24px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .benefit-icon {
+            width: 44px;
+            height: 44px;
+            background: #0077B5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .benefit-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        .benefit-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .benefit-content p {
+            color: #666;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        /* Demo Section */
+        .demo {
+            padding: 80px 0;
+            background: white;
+            text-align: center;
+        }
+
+        .demo h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .demo p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .demo-placeholder {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #f1f3f4;
+            border: 2px dashed #9aa0a6;
+            border-radius: 12px;
+            padding: 60px 20px;
+            color: #5f6368;
+            font-size: 1.1rem;
+        }
+
+        /* Final CTA Section */
+        .final-cta {
+            padding: 80px 0;
+            background: #0077B5;
+            color: white;
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .final-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 32px;
+            opacity: 0.9;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: #ccc;
+            padding: 50px 0 30px 0;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #0077B5;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 24px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .tagline {
+                font-size: 1.1rem;
+            }
+
+            .features h2,
+            .how-it-works h2,
+            .benefits h2,
+            .demo h2,
+            .final-cta h2 {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+
+            .benefit-item {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 60px 0 80px 0;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .tagline {
+                font-size: 1rem;
+            }
+
+            .cta-button {
+                padding: 16px 28px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm-1-7.9c-.7 0-1.3-.6-1.3-1.3s.6-1.3 1.3-1.3 1.3.6 1.3 1.3-.6 1.3-1.3 1.3zM17 17h-2v-3.4c0-.8-.7-1.4-1.5-1.4s-1.5.6-1.5 1.4V17h-2v-7h2v.9c.5-.8 1.4-1.2 2.3-1.2 1.5 0 2.7 1.2 2.7 2.7V17z"/>
+                    </svg>
+                </div>
+                <h1>LinkedIn Post Organizer</h1>
+                <p class="tagline">Add categories to your LinkedIn saved posts and find them easily with search and filtering</p>
+                <a href="#" class="cta-button">
+                    <svg class="chrome-icon" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0z"/>
+                        <path fill="#34A853" d="M23.334 8.727c-.115-.379-.249-.747-.4-1.102H12a5.454 5.454 0 0 1 0 10.909l6.849 3.954C21.743 19.169 24 15.79 24 12c0-1.085-.146-2.135-.423-3.125z"/>
+                        <path fill="#FBBC05" d="M12 17.454A5.454 5.454 0 0 1 6.545 12 5.454 5.454 0 0 1 12 6.545l-6.848-3.954A12 12 0 0 0 0 12c0 6.627 5.373 12 12 12l6.849-3.954a11.952 11.952 0 0 1-6.849 1.408z"/>
+                        <path fill="#EA4335" d="M12 6.545A5.454 5.454 0 0 1 17.454 12L12 17.454 5.151 13.5A5.454 5.454 0 0 1 12 6.545z"/>
+                    </svg>
+                    Add to Chrome
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Core Features</h2>
+                <p class="features-subtitle">Organize your LinkedIn saved posts with a simple categorization system that works directly within LinkedIn.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <h3>Custom Categories</h3>
+                    <p>Create categories like "Industry News," "Career Development," or "Networking" to organize posts by topic.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                    </div>
+                    <h3>Search & Filter</h3>
+                    <p>Find specific posts using search terms or filter by category, author, or date to locate content quickly.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <h3>LinkedIn Integration</h3>
+                    <p>Category dropdowns appear directly on LinkedIn's saved posts page - no need to leave the platform.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <h3>Cross-Device Sync</h3>
+                    <p>Your categories and organization sync across all Chrome browsers where you're signed in.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Install Extension</h3>
+                    <p>Add the extension to Chrome and it automatically integrates with LinkedIn.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Categorize Posts</h3>
+                    <p>Visit your LinkedIn saved posts and select categories from the dropdown menus that appear.</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Find Content</h3>
+                    <p>Use the extension panel to search and filter your organized posts by category or keywords.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="benefits">
+        <div class="container">
+            <div class="section-header">
+                <h2>What You Can Do</h2>
+                <p class="benefits-subtitle">Turn your LinkedIn saved posts into an organized reference system for your professional development.</p>
+            </div>
+            
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Find Posts Quickly</h3>
+                        <p>Locate specific saved content in seconds instead of scrolling through chronological lists.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M9 11H7v6h2v-6zm4 0h-2v6h2v-6zm4 0h-2v6h2v-6zm2.5-9H19V1h-2v1H7V1H5v1H3.5C2.67 2 2 2.67 2 3.5v16C2 20.33 2.67 21 3.5 21h17c.83 0 1.5-.67 1.5-1.5v-16C22 2.67 21.33 2 20.5 2z"/>
+                        </svg>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Organize by Topic</h3>
+                        <p>Group related posts together to create focused collections of industry insights or career advice.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/>
+                        </svg>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Reference Material</h3>
+                        <p>Create a searchable reference library of professional content for meetings and projects.</p>
+                    </div>
+                </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 6L12 10.5 8.5 8 12 5.5 15.5 8zM12 19c-3.87 0-7-3.13-7-7 0-1.28.35-2.48.94-3.52l5.56 3.52 5.56-3.52c.59 1.04.94 2.24.94 3.52 0 3.87-3.13 7-7 7z"/>
+                        </svg>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Track Learning</h3>
+                        <p>Keep educational content organized by skill area or learning objective for professional growth.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo">
+        <div class="container">
+            <h2>See It In Action</h2>
+            <p>Screenshots showing the extension working within LinkedIn's interface</p>
+            <div class="demo-placeholder">
+                📷 Screenshots would be placed here showing:<br>
+                • Category dropdown on LinkedIn saved posts<br>
+                • Extension panel with filtered posts<br>
+                • Category management interface
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Get Organized Today</h2>
+            <p>Start categorizing your LinkedIn saved posts and find important content when you need it.</p>
+            <a href="#" class="cta-button">
+                <svg class="chrome-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0z"/>
+                    <path fill="#34A853" d="M23.334 8.727c-.115-.379-.249-.747-.4-1.102H12a5.454 5.454 0 0 1 0 10.909l6.849 3.954C21.743 19.169 24 15.79 24 12c0-1.085-.146-2.135-.423-3.125z"/>
+                    <path fill="#FBBC05" d="M12 17.454A5.454 5.454 0 0 1 6.545 12 5.454 5.454 0 0 1 12 6.545l-6.848-3.954A12 12 0 0 0 0 12c0 6.627 5.373 12 12 12l6.849-3.954a11.952 11.952 0 0 1-6.849 1.408z"/>
+                    <path fill="#EA4335" d="M12 6.545A5.454 5.454 0 0 1 17.454 12L12 17.454 5.151 13.5A5.454 5.454 0 0 1 12 6.545z"/>
+                </svg>
+                Add to Chrome
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Support</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LinkedIn Post Organizer. Not affiliated with LinkedIn Corporation.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple click handler for CTA buttons
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Replace with actual Chrome Web Store URL
+                // window.open('https://chrome.google.com/webstore/detail/your-extension-id', '_blank');
+                alert('This would open the Chrome Web Store listing for the extension.');
+            });
+        });
+
+        // Smooth scrolling for any anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
