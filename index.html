@@ -325,17 +325,20 @@
             margin-right: auto;
         }
 
-        .demo-placeholder {
+        .demo-video-wrapper {
             max-width: 800px;
             margin: 0 auto;
-            background: #f1f3f4;
-            border: 2px dashed #9aa0a6;
             border-radius: 12px;
-            padding: 60px 20px;
-            color: #5f6368;
-            font-size: 1.1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            background: #000; /* Fallback for video background */
         }
 
+        .demo-video-wrapper video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
         /* Final CTA Section */
         .final-cta {
             padding: 80px 0;
@@ -608,6 +611,18 @@
                         <p>Keep educational content organized by skill area or learning objective for professional growth.</p>
                     </div>
                 </div>
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2zm-4 0h-4V7c0-1.1.9-2 2-2s2 .9 2 2v3zm3 12H7V12h10v10z"/>
+                        </svg>
+                    </div>
+                    <div class="benefit-content">
+                        <h3>Data Privacy</h3>
+                        <p>Your categorized data is stored locally in your browser and never leaves your device.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -616,12 +631,12 @@
     <section class="demo">
         <div class="container">
             <h2>See It In Action</h2>
-            <p>Screenshots showing the extension working within LinkedIn's interface</p>
-            <div class="demo-placeholder">
-                📷 Screenshots would be placed here showing:<br>
-                • Category dropdown on LinkedIn saved posts<br>
-                • Extension panel with filtered posts<br>
-                • Category management interface
+            <p>Watch this short video to see how the extension works directly within LinkedIn's interface.</p>
+            <div class="demo-video-wrapper">
+                <video controls autoplay loop muted playsinline>
+                    <source src="https://res.cloudinary.com/dvcl31tyv/video/upload/v1756019643/Screen_Recording_2025-08-24_at_12.22.32_PM_b8hza0.mov" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </div>
         </div>
     </section>
@@ -645,16 +660,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Support</a>
-                <a href="#">Contact</a>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 LinkedIn Post Organizer. Not affiliated with LinkedIn Corporation.</p>
-            </div>
-        </div>
+        <p>&copy; 2025 LinkedIn Post Organizer. Not affiliated with LinkedIn Corporation.</p>
     </footer>
 
     <script>
